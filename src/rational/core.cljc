@@ -1,11 +1,12 @@
 (ns rational.core
-  (:refer-clojure :exclude [rational? numerator denominator + - * / *' +' - -' pos? neg? zero? >= > <= <])
+  (:refer-clojure :exclude [rational? numerator denominator + - * / *' +' - -' pos? neg? zero? >= > <= < =])
   (:require [hyperfiddle.rcf :refer [tests]]))
 
 (def sum clojure.core/+)
 (def product clojure.core/*)
 (def difference clojure.core/-)
 (def quotient clojure.core//)
+(def equals clojure.core/=)
 
 (defrecord Ratio [numerator denominator])
 
@@ -16,7 +17,7 @@
   (:denominator rational))
 
 (defn rational? [x]
-  (= (type x) Ratio))
+  (equals (type x) Ratio))
 
 (defn rational [numerator denominator]
   (->Ratio numerator denominator))
@@ -134,6 +135,7 @@
 (def > (make-comparator clojure.core/>))
 (def <= (make-comparator clojure.core/<=))
 (def < (make-comparator clojure.core/<))
+(def = (make-comparator clojure.core/=))
 
 (tests
  (>= (rational 3 2) (rational 2 2) (rational 2 2) (rational 1 2) (rational 1 2)) := true
@@ -141,7 +143,10 @@
 
  (> (rational 1 3) (rational 2 3)) := false
  (> (rational 1 3) (rational 1 3)) := false
- (> (rational 1 3) (rational 1 6)) := true)
+ (> (rational 1 3) (rational 1 6)) := true
+ (= (rational 1 3) (rational 1 3)) := true
+ (= (rational 1 3) (rational 1 2)) := false
+ )
 
 (comment
 
